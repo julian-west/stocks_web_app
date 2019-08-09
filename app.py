@@ -30,6 +30,7 @@ data = PerformanceReport()
 index_chart = data.plot_performance_chart()
 swarm_plot = data.plot_swarm_plot()
 yoy_growth_chart = data.plot_yoy_growth()
+drawdown_chart = data.plot_drawdown()
 
 
 stock_list = []
@@ -120,10 +121,17 @@ app.layout = html.Main([
                             ], label="YoY Growth"),
                             dbc.Tab(
                                 dbc.Table.from_dataframe(
-                                    data.monthly_returns_table, striped=True, bordered=True, hover=True, responsive=True), label="Index Monthly Returns")
-                        ])
-                    ])
-                ])
+                                    data.monthly_returns_table, striped=True, bordered=True, hover=True, responsive=True), label="Index Monthly Returns"
+                                    ),
+                            dbc.Tab([
+                                dbc.Row([
+                                    html.H4("'Under-water Plot' - Drawdown Periods",style={'padding': 10}),
+                                    dcc.Graph(figure=drawdown_chart)
+                                ]),
+                            ],label="Drawdown"),
+                        ]),
+                    ]),
+                ]),
             ]),
         ]),
 

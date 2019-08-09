@@ -55,13 +55,12 @@ class PerformanceReport:
         # rebased_prices['log_index'] = np.log(rebased_prices['index'])
 
         self.rebased_prices = rebased_prices
+        self.index_stats = self.rebased_prices['index'].calc_stats()
 
     def generate_monthly_returns_table(self):
 
-        index = self.rebased_prices['index']
-        index_stats = index.calc_stats()
         monthly_rtns_df = pd.DataFrame.from_dict(
-            dict(index_stats.monthly_returns), orient='index')
+            dict(self.index_stats.monthly_returns), orient='index')
 
         monthly_rtns_df = monthly_rtns_df.groupby(
             by=[monthly_rtns_df.index.year, monthly_rtns_df.index.month]).sum().unstack().fillna(0)
@@ -159,19 +158,19 @@ class PerformanceReport:
             text=[x if x == names[0] or x == names[-1] else "" for x in names],
             textposition='top center')
 
-        layout=go.Layout(
-            plot_bgcolor = '#fff',
-            yaxis = dict(
+        layout = go.Layout(
+            plot_bgcolor='#fff',
+            yaxis=dict(
                 showticklabels=False,
                 showgrid=False,
                 range=[-0.1, 0.1]),
-            xaxis = dict(
+            xaxis=dict(
                 range=[-0.1, 0.1],
                 tickformat="%",
                 title="Stock Price Growth"),
-            margin = {'t': 5},
-            height = 200,
-            shapes = [dict(type='line',
+            margin={'t': 5},
+            height=200,
+            shapes=[dict(type='line',
                          xref='x',
                          yref='y',
                          x0=0,
@@ -182,60 +181,82 @@ class PerformanceReport:
                                    dash='dot')
                          )])
 
-        swarm_plot=go.Figure(dict(data=data, layout=layout))
+        swarm_plot = go.Figure(dict(data=data, layout=layout))
 
         return swarm_plot
 
     def calc_year_over_year_growth(self):
-        yoy_growth=self.rebased_prices.resample('D').sum()
-        yoy_growth=yoy_growth.replace(0, method = 'ffill')
-        yoy_growth=yoy_growth.groupby(
+        yoy_growth = self.rebased_prices.resample('D').sum()
+        yoy_growth = yoy_growth.replace(0, method='ffill')
+        yoy_growth = yoy_growth.groupby(
             [yoy_growth.index.day, yoy_growth.index.month]).pct_change()
-        yoy_growth=yoy_growth.dropna(axis = 0)
-        yoy_growth['28dayMA']=yoy_growth['index'].rolling(window = 28).mean()
+        yoy_growth = yoy_growth.dropna(axis=0)
+        yoy_growth['28dayMA'] = yoy_growth['index'].rolling(window=28).mean()
 
-        self.yoy_growth=yoy_growth
+        self.yoy_growth = yoy_growth
 
     def plot_yoy_growth(self):
 
         # CALENDAR MAP IMAGE
-        calmap.calendarplot(self.yoy_growth.iloc[self.yoy_growth.index.year > 2016]['index'], monthticks = 1, daylabels = 'MTWTF',
-                            dayticks = [0, 2, 4], cmap = 'RdYlGn',
-                            linewidth = 0.2,
-                            yearascending = False,
-                            yearlabel_kws = dict(color='#696969'),
-                            fig_kws = dict(figsize=(12, 8)))
+        calmap.calendarplot(self.yoy_growth.iloc[self.yoy_growth.index.year > 2016]['index'], monthticks=1, daylabels='MTWTF',
+                            dayticks=[0, 2, 4], cmap='RdYlGn',
+                            linewidth=0.2,
+                            yearascending=False,
+                            yearlabel_kws=dict(color='#696969'),
+                            fig_kws=dict(figsize=(12, 8)))
 
         plt.savefig('assets/yoy_calmap.png')
 
         # YOY GROWTH - show different colour for positive and negative yoy growth
-        postive_growth=go.Scatter(
-            y = [0 if x < 0 else x for x in self.yoy_growth['28dayMA']],
-            x = self.yoy_growth.index,
-            fill = 'tozeroy',
-            line = dict(color='#2F80ED'))
+        postive_growth = go.Scatter(
+            y=[0 if x < 0 else x for x in self.yoy_growth['28dayMA']],
+            x=self.yoy_growth.index,
+            fill='tozeroy',
+            line=dict(color='#2F80ED'))
 
-        negative_growth=go.Scatter(
-            y = [0 if x > 0 else x for x in self.yoy_growth['28dayMA']],
-            x = self.yoy_growth.index,
-            fill = 'tozeroy')
+        negative_growth = go.Scatter(
+            y=[0 if x > 0 else x for x in self.yoy_growth['28dayMA']],
+            x=self.yoy_growth.index,
+            fill='tozeroy')
 
-        baseline=go.Scatter(
-            y = [0 for x in self.yoy_growth.index],
-            x = self.yoy_growth.index,
-            line = dict(color='black'))
+        baseline = go.Scatter(
+            y=[0 for x in self.yoy_growth.index],
+            x=self.yoy_growth.index,
+            line=dict(color='black'))
 
-        layout=go.Layout(
-            plot_bgcolor = '#ffffff',
-            yaxis = dict(tickformat="%"),
-            xaxis = dict(
+        layout = go.Layout(
+            plot_bgcolor='#ffffff',
+            yaxis=dict(tickformat="%"),
+            xaxis=dict(
                 range=([self.yoy_growth.index.min(),
                         self.yoy_growth.index.max() + pd.DateOffset(months=6)])
             ),
-            showlegend = False,
-            hovermode = 'x')
+            showlegend=False,
+            hovermode='x')
 
-        yoy_growth_chart=go.Figure(
-            data = [postive_growth, negative_growth, baseline], layout = layout)
+        yoy_growth_chart = go.Figure(
+            data=[postive_growth, negative_growth, baseline], layout=layout)
 
         return yoy_growth_chart
+
+    def plot_drawdown(self):
+        """Plot drawndown series"""
+        data = go.Scatter(
+            y=self.index_stats.drawdown.values,
+            x=self.index_stats.drawdown.index)
+
+        layout = go.Layout(
+            plot_bgcolor='#ffffff',
+            margin={'t': 5},
+            yaxis=dict(tickformat="%",
+            title="% Drawdown from last peak"),
+            xaxis=dict(
+                range=([self.index_stats.drawdown.index.min(),
+                        self.index_stats.drawdown.index.max() + pd.DateOffset(months=6)])
+            ),
+            showlegend=False,
+            hovermode='x'
+        )
+        drawdown_chart=go.Figure(data = data,layout=layout)
+
+        return drawdown_chart
