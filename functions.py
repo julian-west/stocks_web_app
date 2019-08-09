@@ -240,7 +240,7 @@ class PerformanceReport:
         return yoy_growth_chart
 
     def plot_drawdown(self):
-        """Plot drawndown series"""
+        """Plot drawndown series of the index"""
         data = go.Scatter(
             y=self.index_stats.drawdown.values,
             x=self.index_stats.drawdown.index)
