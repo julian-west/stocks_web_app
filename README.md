@@ -3,6 +3,7 @@ Plotly-dash web application: Evaluate group of stocks
 
 ### Future Work
 
+- make into web app (on Heroku)
 - tidy up formatting
 - individual stocks statistics
 - multiple pages for the different indexes
