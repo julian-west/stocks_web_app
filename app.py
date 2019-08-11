@@ -22,7 +22,7 @@ import flask
 
 
 server = flask.Flask(__name__)
-app = dash.Dash(__name__,server=server)
+app = dash.Dash(__name__, server=server)
 app.title = "Stocks Summary"
 
 
@@ -42,15 +42,15 @@ for i, stock in enumerate(data.prices.columns):
 ############## LAYOUT ######################
 
 app.layout = html.Main([
-
     dbc.Row(
         [
             html.H3("VACUUM PROCESSING INDEX",
                     style={'text-align': 'center'}),
             html.Div([
                 html.Span([
-                    html.A("Raw Data", href="/download_excel/",style={'margin-right':'10px'}),
-                    html.I(className="fa fa-arrow-circle-down")],className="button")
+                    html.A("Raw Data", href="/download_excel/",
+                           style={'margin-right': '10px'}),
+                    html.I(className="fa fa-arrow-circle-down")], className="button")
                 ])
         ],
         className='header', style={'display': 'grid'}),
@@ -75,11 +75,17 @@ app.layout = html.Main([
                             [
                                 html.H4(
                                     f"{round(data.current_index_value,2)} ", className="card-title"),
-                                html.P(f"Daily change {round(data.daily_index_pct_change,2)} %",
+                                html.P(
+                                    [html.P(f"Daily change: "),
+                                        html.Span(f"{round(data.daily_index_pct_change,2)} %",className='number')],
                                        className="card-text"),
-                                html.P(f"Weekly change {round(data.weekly_index_pct_change,2)} %",
+                                html.P(
+                                    [html.P(f"Weekly change: "),
+                                     html.Span(f"{round(data.weekly_index_pct_change,2)} %",className='number')],
                                        className="card-text"),
-                                html.P(f"Monthly change {round(data.monthly_index_pct_change,2)} %",
+                                html.P(
+                                    [html.P(f"Monthly change: "),
+                                     html.Span(f"{round(data.monthly_index_pct_change,2)} %",className='number')],
                                        className="card-text"),
                             ]
                         ),
@@ -88,18 +94,6 @@ app.layout = html.Main([
                 ),
             ], width=4),
         ], align='center'),
-        dbc.Row([
-            dbc.Col([
-                dbc.Card([
-                    dbc.CardBody([
-                        html.H4("Individual Stock Price Growth", style={
-                                'text-align': 'left', 'padding-bottom': 0}),
-                        dcc.Graph(figure=swarm_plot)
-                    ]),
-                ]
-                ),
-            ], width=12)
-        ]),
         dbc.Row([
             dbc.Col([
                 dbc.Card([
@@ -127,10 +121,11 @@ app.layout = html.Main([
                                     ),
                             dbc.Tab([
                                 dbc.Row([
-                                    html.H4("'Under-water Plot' - Drawdown Periods",style={'padding': 10}),
+                                    html.H4(
+                                        "'Under-water Plot' - Drawdown Periods", style={'padding': 10}),
                                     dcc.Graph(figure=drawdown_chart)
                                 ]),
-                            ],label="Drawdown"),
+                            ], label="Drawdown"),
                         ]),
                     ]),
                 ]),
@@ -142,7 +137,12 @@ app.layout = html.Main([
                 dbc.Card([
                     dbc.CardBody([
                         html.H1("Individual Stocks", style={
-                                'textAlign': 'center'}),
+                                'textAlign': 'center','padding-bottom':'20px'}),
+                        html.H4("Stock Price Growth", style={
+                                'text-align': 'left', 'padding-bottom': '10px'}),
+                        dcc.Graph(figure=swarm_plot),
+                        html.H4("Stock Prices - Rebased", style={
+                                'text-align': 'left', 'padding-bottom': '10px'}),
                         dcc.Dropdown(id='my-dropdown',
                                      options=stock_list,
                                      multi=True,
@@ -169,7 +169,7 @@ app.layout = html.Main([
               [Input('my-dropdown', 'value')])
 def update_graph(selected_dropdown_value):
 
-    equity_traces = []
+    equity_traces=[]
 
     for stock in selected_dropdown_value:
         equity_traces.append(go.Scatter(
@@ -181,7 +181,7 @@ def update_graph(selected_dropdown_value):
             textposition='bottom center'))
 
     # data = [val for sublist in traces for val in sublist]
-    figure = {'data': equity_traces,
+    figure={'data': equity_traces,
               'layout': go.Layout(
                   colorway=['#d53e4f', '#f46d43', '#fdae61', '#fee08b',
                             '#e6f598', '#abdda4', '#66c2a5', '#3288bd'],
@@ -206,16 +206,16 @@ def update_graph(selected_dropdown_value):
 def download_excel():
     # Create DF
 
-    raw_prices = pd.DataFrame(data=data.prices)
-    rebased_prices = pd.DataFrame(data=data.rebased_prices)
+    raw_prices=pd.DataFrame(data=data.prices)
+    rebased_prices=pd.DataFrame(data=data.rebased_prices)
 
     # Convert DF
-    strIO = io.BytesIO()
-    excel_writer = pd.ExcelWriter(strIO, engine="xlsxwriter")
+    strIO=io.BytesIO()
+    excel_writer=pd.ExcelWriter(strIO, engine="xlsxwriter")
     raw_prices.to_excel(excel_writer, sheet_name="raw_prices")
     rebased_prices.to_excel(excel_writer, sheet_name="rebased_prices")
     excel_writer.save()
-    excel_data = strIO.getvalue()
+    excel_data=strIO.getvalue()
     strIO.seek(0)
 
     return send_file(strIO,
