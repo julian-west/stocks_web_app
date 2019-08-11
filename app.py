@@ -18,9 +18,11 @@ import io
 
 from functions import PerformanceReport
 from const import STOCKS, COMPANY_NAMES
+import flask
 
 
-app = dash.Dash()
+server = flask.Flask(__name__)
+app = dash.Dash(__name__,server=server)
 app.title = "Stocks Summary"
 
 
