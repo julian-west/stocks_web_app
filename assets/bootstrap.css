@@ -73,7 +73,7 @@ body {
   background-color: #fbfcfc;
 }
 
-#_dash-app-content > main > div.header.row > div{
+main > div.header.row > div{
   padding: 20px 10px 0px;
   text-align: center;
 }
