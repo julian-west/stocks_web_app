@@ -11,3 +11,8 @@ Plotly-dash web application: Evaluate group of stocks
 - multiple pages for the different indexes
 - ~~red and green text for positive or negative growth~~
 - can choose different time periods for the swarm plot (e.g. weekly, monthly, yearly changes etc.) with dynamic x axis
+- consolodate graph formatting/layout into master file
+- drawdown statistics
+- summary statistics with stock weightings and daily, weekly, monthly, yearly performance in a table
+
+- add unit tests
