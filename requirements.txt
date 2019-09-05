@@ -12,3 +12,4 @@ dash_html_components==1.0.0
 dash_table==4.1.0
 ffn==0.3.4
 gunicorn==19.9.0
+xlsxwriter==1.1.5
