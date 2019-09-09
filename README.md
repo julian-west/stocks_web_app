@@ -16,3 +16,6 @@ Plotly-dash web application: Evaluate group of stocks
 - summary statistics with stock weightings and daily, weekly, monthly, yearly performance in a table
 
 - add unit tests
+
+### Web app
+https://stock-analysis-web-app.herokuapp.com/
