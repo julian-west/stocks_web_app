@@ -1,5 +1,20 @@
 # stocks_web_app
-Plotly-dash web application: Evaluate group of stocks
+Plotly-dash web application: Create a custom weighted index to evaluate group of semiconductor stocks
+
+Currently tracks the following stocks:
+  - Applied Materials (AMAT)
+  - Lam Research (LRCX)
+  - ASM international (ASM)
+  - Tokyo Electron (8035.T)
+
+
+### Web app link
+https://stock-analysis-web-app.herokuapp.com/
+
+
+![gif](./assets/web-app.gif)
+
+
 
 ### Future Work
 
@@ -17,5 +32,3 @@ Plotly-dash web application: Evaluate group of stocks
 
 - add unit tests
 
-### Web app
-https://stock-analysis-web-app.herokuapp.com/
