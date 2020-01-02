@@ -110,7 +110,7 @@ class PerformanceReport:
                          x0= INDEX_DATE,
                          y0=0,
                          x1= INDEX_DATE,
-                         y1=180,
+                         y1=140,
                          line=dict(color='#dae4f5',
                                    dash='dot')
                          )
