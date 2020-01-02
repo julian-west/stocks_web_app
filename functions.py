@@ -107,9 +107,9 @@ class PerformanceReport:
             shapes=[dict(type='line',
                          xref='x',
                          yref='y',
-                         x0='2018-12-28',
+                         x0= INDEX_DATE,
                          y0=0,
-                         x1='2018-12-28',
+                         x1= INDEX_DATE,
                          y1=180,
                          line=dict(color='#dae4f5',
                                    dash='dot')

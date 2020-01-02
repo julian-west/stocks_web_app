@@ -2,7 +2,7 @@ import pandas as pd
 
 
 START_DATE = '2012-01-01'
-INDEX_DATE = '2018-12-28'
+INDEX_DATE = '2019-12-27'
 
 
 df = pd.read_csv("assets/data/stocks.csv")

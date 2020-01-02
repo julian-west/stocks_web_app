@@ -17,7 +17,7 @@ from flask import send_file
 import io
 
 from functions import PerformanceReport
-from const import STOCKS, COMPANY_NAMES
+from const import STOCKS, COMPANY_NAMES, INDEX_DATE
 import flask
 
 
@@ -186,7 +186,7 @@ def update_graph(selected_dropdown_value):
                   colorway=['#d53e4f', '#f46d43', '#fdae61', '#fee08b',
                             '#e6f598', '#abdda4', '#66c2a5', '#3288bd'],
                   height=600,
-                  title=f"Stock prices for {', '.join(i for i in selected_dropdown_value)} rebased to '2018-12-28'",
+                  title=f"Stock prices for {', '.join(i for i in selected_dropdown_value)} rebased to {INDEX_DATE}",
                   xaxis=dict(title="Date",
                              rangeselector=dict(buttons=list([{'count': 1, 'label': '1M', 'step': 'month', 'stepmode': 'backward'},
                                                               {'count': 6, 'label': '6M',
@@ -196,7 +196,7 @@ def update_graph(selected_dropdown_value):
                                      data.rebased_prices.index.max() + pd.DateOffset(months=6)]),
                              rangeslider={'visible': True},
                              type='date'),
-                  yaxis=dict(title="Stock price (indexed at '2018-12-28')",
+                  yaxis=dict(title=f"Stock price (indexed at {INDEX_DATE})",
                              autorange=True,
                              fixedrange=False))}
     return figure
