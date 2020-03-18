@@ -591,8 +591,8 @@ pre code {
   0 0.085rem 0.0875rem rgba(13,16,45,0.02);
   position: relative;
   background: #56CCF2;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: -webkit-linear-gradient(to bottom, #2f80ed, #0096f4, #00a9f6, #25bbf5, #56ccf2);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #2f80ed, #0096f4, #00a9f6, #25bbf5, #56ccf2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color:#fff;
   width: 100%;
   padding-right: 15px;
