@@ -11,6 +11,7 @@ Currently tracks the following stocks:
 ### Web app link
 https://stock-analysis-web-app.herokuapp.com/
 
+> Note: The app is hosted on a small (free!) dyno hosted by Heroku. If the app doesn't work, try again later or refresh the page a few times until the dyno has woken up again ;).
 
 ![gif](./assets/web-app.gif)
 
