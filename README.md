@@ -29,4 +29,3 @@ https://stock-analysis-web-app.herokuapp.com/
 - summary statistics with stock weightings and daily, weekly, monthly, yearly performance in a table
 
 - add unit tests
-

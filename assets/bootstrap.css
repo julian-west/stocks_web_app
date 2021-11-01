@@ -585,9 +585,9 @@ pre code {
 
 .header{
   background-color: #fff;
-  box-shadow:0 0.36875rem 1.1875rem rgba(13,16,45,0.01), 
-  0 0.6375rem 1.00625rem rgba(13,16,45,0.01), 
-  0 0.15rem 0.33125rem rgba(13,16,45,0.03), 
+  box-shadow:0 0.36875rem 1.1875rem rgba(13,16,45,0.01),
+  0 0.6375rem 1.00625rem rgba(13,16,45,0.01),
+  0 0.15rem 0.33125rem rgba(13,16,45,0.03),
   0 0.085rem 0.0875rem rgba(13,16,45,0.02);
   position: relative;
   background: #56CCF2;  /* fallback for old browsers */
