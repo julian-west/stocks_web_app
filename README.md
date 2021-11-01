@@ -15,8 +15,6 @@ https://stock-analysis-web-app.herokuapp.com/
 
 ![gif](./assets/web-app.gif)
 
-
-
 ### Future Work
 
 - ~~make into web app (on Heroku)~~
