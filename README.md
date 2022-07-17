@@ -27,5 +27,4 @@ https://stock-analysis-web-app.herokuapp.com/
 - can choose different time periods for the swarm plot (e.g. weekly, monthly, yearly changes etc.) with dynamic x axis
 - consolodate graph formatting/layout into master file
 - summary statistics with stock weightings and daily, weekly, monthly, yearly performance in a table
-
 - add unit tests
