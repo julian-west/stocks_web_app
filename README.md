@@ -7,13 +7,26 @@ Currently tracks the following stocks:
   - ASM international (ASM)
   - Tokyo Electron (8035.T)
 
-
 ### Web app link
 https://stock-analysis-web-app.herokuapp.com/
 
 > Note: The app is hosted on a small (free!) dyno hosted by Heroku. If the app doesn't work, try again later or refresh the page a few times until the dyno has woken up again ;).
 
 ![gif](./assets/web-app.gif)
+
+
+### Running locally
+
+```
+# install requirements
+pip install -r requirements.txt
+
+# install local package
+pip install -e .
+
+# run app
+python src/app.py
+```
 
 ### Future Work
 
