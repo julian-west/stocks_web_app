@@ -38,3 +38,10 @@ repos:
     entry: flake8 --ignore=E501
     types: [python]
     exclude: setup.py
+
+  - id: mypy
+    name: mypy
+    stages: [commit]
+    language: system
+    entry: mypy
+    types: [python]

@@ -233,7 +233,7 @@ class PerformanceReport:
             fig_kws=dict(figsize=(12, 8)),
         )
 
-        plt.savefig("assets/yoy_calmap.png")
+        plt.savefig("./src/assets/yoy_calmap.png")
 
         # YOY GROWTH - show different colour for positive and negative yoy growth
         postive_growth = go.Scatter(
