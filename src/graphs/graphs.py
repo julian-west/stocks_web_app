@@ -55,8 +55,7 @@ def plot_index_chart(data: StockData):
         ],
     )
 
-    perf_chart = go.Figure(dict(data=[trace_equity], layout=layout))
-    return perf_chart
+    return go.Figure(dict(data=[trace_equity], layout=layout))
 
 
 def plot_yoy_growth(summary: SummaryData):
@@ -78,17 +77,19 @@ def plot_yoy_growth(summary: SummaryData):
 
     # YOY GROWTH - show different colour for positive and negative yoy growth
     postive_growth = go.Scatter(
-        y=[0 if x < 0 else x for x in summary.yoy_growth["28dayMA"]],
+        y=[max(x, 0) for x in summary.yoy_growth["28dayMA"]],
         x=summary.yoy_growth.index,
         fill="tozeroy",
         line=dict(color="#2F80ED"),
     )
 
+
     negative_growth = go.Scatter(
-        y=[0 if x > 0 else x for x in summary.yoy_growth["28dayMA"]],
+        y=[min(x, 0) for x in summary.yoy_growth["28dayMA"]],
         x=summary.yoy_growth.index,
         fill="tozeroy",
     )
+
 
     baseline = go.Scatter(
         y=[0 for _ in summary.yoy_growth.index],
@@ -111,11 +112,9 @@ def plot_yoy_growth(summary: SummaryData):
         hovermode="x",
     )
 
-    yoy_growth_chart = go.Figure(
+    return go.Figure(
         data=[postive_growth, negative_growth, baseline], layout=layout
     )
-
-    return yoy_growth_chart
 
 
 def plot_drawdown_chart(summary: SummaryData):
@@ -139,9 +138,7 @@ def plot_drawdown_chart(summary: SummaryData):
         showlegend=False,
         hovermode="x",
     )
-    drawdown_chart = go.Figure(data=data, layout=layout)
-
-    return drawdown_chart
+    return go.Figure(data=data, layout=layout)
 
 
 def plot_swarm_chart(summary: SummaryData):
@@ -196,22 +193,20 @@ def plot_swarm_chart(summary: SummaryData):
 
 def plot_individual_stock_prices(data: StockData, stocks):
 
-    equity_traces = []
-
-    for stock in stocks:
-        equity_traces.append(
-            go.Scatter(
-                x=data.rebased_prices.index.tolist(),
-                y=data.rebased_prices[stock].values.tolist(),
-                mode="lines",
-                opacity=0.7,
-                name=stock,
-                textposition="bottom center",
-            )
+    equity_traces = [
+        go.Scatter(
+            x=data.rebased_prices.index.tolist(),
+            y=data.rebased_prices[stock].values.tolist(),
+            mode="lines",
+            opacity=0.7,
+            name=stock,
+            textposition="bottom center",
         )
+        for stock in stocks
+    ]
 
-    # data = [val for sublist in traces for val in sublist]
-    figure = {
+
+    return {
         "data": equity_traces,
         "layout": go.Layout(
             colorway=[
@@ -225,32 +220,32 @@ def plot_individual_stock_prices(data: StockData, stocks):
                 "#3288bd",
             ],
             height=600,
-            title=f"Stock prices for {', '.join(i for i in stocks)} rebased to {data.index_date}",
+            title=f"Stock prices for {', '.join(stocks)} rebased to {data.index_date}",
             xaxis=dict(
                 title="Date",
                 rangeselector=dict(
-                    buttons=list(
-                        [
-                            {
-                                "count": 1,
-                                "label": "1M",
-                                "step": "month",
-                                "stepmode": "backward",
-                            },
-                            {
-                                "count": 6,
-                                "label": "6M",
-                                "step": "month",
-                                "stepmode": "backward",
-                            },
-                            {"step": "all"},
-                        ]
-                    )
+                    buttons=[
+                        {
+                            "count": 1,
+                            "label": "1M",
+                            "step": "month",
+                            "stepmode": "backward",
+                        },
+                        {
+                            "count": 6,
+                            "label": "6M",
+                            "step": "month",
+                            "stepmode": "backward",
+                        },
+                        {"step": "all"},
+                    ]
                 ),
                 range=(
                     [
-                        data.rebased_prices.index.max() - pd.DateOffset(months=24),
-                        data.rebased_prices.index.max() + pd.DateOffset(months=6),
+                        data.rebased_prices.index.max()
+                        - pd.DateOffset(months=24),
+                        data.rebased_prices.index.max()
+                        + pd.DateOffset(months=6),
                     ]
                 ),
                 rangeslider={"visible": True},
@@ -263,4 +258,3 @@ def plot_individual_stock_prices(data: StockData, stocks):
             ),
         ),
     }
-    return figure
