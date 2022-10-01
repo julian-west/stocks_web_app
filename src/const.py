@@ -4,7 +4,7 @@ START_DATE = "2012-01-01"
 INDEX_DATE = "2020-12-30"
 
 
-df = pd.read_csv("data/stocks.csv")
+df = pd.read_csv("./src/data/stocks.csv")
 STOCKS = list(df["ticker"].values)
 COMPANY_NAMES = list(df["company name"].values)
 WEIGHTS = list(df["weighting"].values)
