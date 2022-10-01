@@ -6,6 +6,45 @@ import plotly.graph_objs as go
 import seaborn as sns
 
 from const import INDEX_DATE, START_DATE, STOCKS, WEIGHTS
+from data.data import StockData
+
+
+class SummaryBox:
+    def __init__(self, data: StockData):
+        self.data = data
+        self.current_index_value = self.data.rebased_prices["index"].iloc[-1]
+
+    @property
+    def daily_growth(self):
+        return (
+            (self.current_index_value / self.data.rebased_prices["index"].iloc[-2]) - 1
+        ) * 100
+
+    @property
+    def weekly_growth(self):
+        return (
+            (self.current_index_value / self.data.rebased_prices["index"].iloc[-5]) - 1
+        ) * 100
+
+    @property
+    def monthly_growth(self):
+        """calculate monthly returns"""
+        return (
+            (self.current_index_value / self.data.rebased_prices["index"].iloc[-28]) - 1
+        ) * 100
+
+    @property
+    def yoy_growth(self):
+        """calculate yoy growth"""
+        yoy_growth = self.data.rebased_prices.resample("D").sum()
+        yoy_growth = yoy_growth.replace(0, method="ffill")
+        yoy_growth = yoy_growth.groupby(
+            [yoy_growth.index.day, yoy_growth.index.month]
+        ).pct_change()
+        yoy_growth = yoy_growth.dropna(axis=0)
+        yoy_growth["28dayMA"] = yoy_growth["index"].rolling(window=28).mean()
+
+        return yoy_growth
 
 
 class PerformanceReport:
@@ -250,7 +289,7 @@ class PerformanceReport:
         )
 
         baseline = go.Scatter(
-            y=[0 for x in self.yoy_growth.index],
+            y=[0 for _ in self.yoy_growth.index],
             x=self.yoy_growth.index,
             line=dict(color="black"),
         )
