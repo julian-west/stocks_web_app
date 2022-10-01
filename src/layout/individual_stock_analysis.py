@@ -21,9 +21,10 @@ def swarm_chart_layout(summary: SummaryData):
 def individual_stocks(summary: SummaryData) -> dbc.Row:
 
     # todo move somewhere else
-    stock_list = []
-    for i, stock in enumerate(summary.data.data.columns):
-        stock_list.append({"label": COMPANY_NAMES[i], "value": stock})
+    stock_list = [
+        {"label": COMPANY_NAMES[i], "value": stock}
+        for i, stock in enumerate(summary.data.data.columns)
+    ]
 
     return dbc.Row(
         [
