@@ -8,7 +8,7 @@ Currently tracks the following stocks:
   - Tokyo Electron (8035.T)
 
 ### Web app link
-https://stock-analysis-web-app.herokuapp.com/
+https://stock-analysis-web-app.herokuapp.com/ [Currently disabled]
 
 > Note: The app is hosted on a small (free!) dyno hosted by Heroku. If the app doesn't work, try again later or refresh the page a few times until the dyno has woken up again ;).
 
