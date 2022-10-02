@@ -122,7 +122,7 @@ def plot_drawdown_chart(summary: SummaryData):
     layout = go.Layout(
         plot_bgcolor="#ffffff",
         margin={"t": 5},
-        yaxis=dict(tickformat="%", title="% Drawdown from last peak"),
+        yaxis=dict(tickformat=".0%", title="% Drawdown from last peak"),
         xaxis=dict(
             range=(
                 [

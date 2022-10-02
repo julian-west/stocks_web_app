@@ -1,14 +1,22 @@
 import dash_bootstrap_components as dbc
+import pandas as pd
 from dash import dcc, html
 
-from const import COMPANY_NAMES
 from data.summary import SummaryData
 from graphs.graphs import plot_drawdown_chart, plot_yoy_growth
 
 
-def company_names_tab() -> dbc.Tab:
+def company_names_tab(summary: SummaryData) -> dbc.Tab:
     return dbc.Tab(
-        [html.Li(x) for x in COMPANY_NAMES],
+        [
+            dbc.Table.from_dataframe(
+                pd.DataFrame(summary.data.input_dict),
+                striped=True,
+                bordered=True,
+                hover=True,
+                responsive=True,
+            ),
+        ],
         label="Stocks in index",
         style={
             "text-align": "left",
@@ -87,7 +95,7 @@ def tabs(summary: SummaryData) -> dbc.Row:
                                 [
                                     dbc.Tabs(
                                         [
-                                            company_names_tab(),
+                                            company_names_tab(summary),
                                             yoy_growth_tab(summary),
                                             monthy_returns_tab(summary),
                                             drawdown_tab(summary),

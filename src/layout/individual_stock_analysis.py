@@ -1,7 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-from const import COMPANY_NAMES
 from data.summary import SummaryData
 from graphs.graphs import plot_swarm_chart
 
@@ -22,9 +21,10 @@ def individual_stocks(summary: SummaryData) -> dbc.Row:
 
     # todo move somewhere else
     stock_list = [
-        {"label": COMPANY_NAMES[i], "value": stock}
+        {"label": summary.data.company_names[i], "value": stock}
         for i, stock in enumerate(summary.data.data.columns)
     ]
+    print(stock_list)
 
     return dbc.Row(
         [
