@@ -24,7 +24,6 @@ def individual_stocks(summary: SummaryData) -> dbc.Row:
         {"label": summary.data.company_names[i], "value": stock}
         for i, stock in enumerate(summary.data.data.columns)
     ]
-    print(stock_list)
 
     return dbc.Row(
         [

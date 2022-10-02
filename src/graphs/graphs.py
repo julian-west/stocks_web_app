@@ -1,7 +1,7 @@
 import calmap
 import matplotlib.pyplot as plt
 import pandas as pd
-import plotly.express as ex
+import plotly.express as px
 import plotly.graph_objs as go
 
 from data.data import StockData
@@ -140,33 +140,31 @@ def plot_drawdown_chart(summary: SummaryData):
 def plot_swarm_chart(summary: SummaryData):
     """Plot seaborn swarm plot to show growth of different stocks on a linear scale"""
 
-    # TODO: Fix formatting
+    returns = summary.data.rebased_prices.pct_change().tail(1).T.reset_index()
+    returns.columns = ["Company", "Daily Change"]
+    returns["direction"] = returns["Daily Change"].apply(
+        lambda x: "-" if x < 0 else "+"
+    )
 
-    returns = summary.data.rebased_prices.pct_change().iloc[-1, :]
+    swarm_plot = px.strip(
+        returns.loc[returns["direction"] == "-"],
+        x="Daily Change",
+        y="Company",
+        color_discrete_sequence=["darksalmon"],
+    )
+    swarm_plot = swarm_plot.add_traces(
+        px.strip(
+            returns.loc[returns["direction"] == "+"],
+            x="Daily Change",
+            y="Company",
+            color_discrete_sequence=["seagreen"],
+        ).data
+    )
+    swarm_plot = swarm_plot.update_traces(offsetgroup="1")
 
-    # descriptions = [
-    #     names[i] + "<br>" + str(round(coord * 100, 2)) + "%"
-    #     for i, coord in enumerate(x_coords)
-    # ]
-    colors = ["darksalmon" if x < 0 else "seagreen" for x in returns]
-
-    # data = go.Scatter(
-    #     x=x_coords,
-    #     y=y_coords,
-    #     mode="markers+text",
-    #     marker=dict(color=colors),
-    #     hovertext=descriptions,
-    #     hoverinfo="text",
-    #     text=[x if x == names[0] or x == names[-1] else "" for x in names],
-    #     textposition="top center",
-    # )
-
-    # swarm_plot = go.Figure(dict(data=data, layout=layout))
-
-    swarm_plot = ex.strip(x=returns, color_discrete_sequence=colors)
     swarm_plot.update_layout(
         plot_bgcolor="#fff",
-        yaxis=dict(showticklabels=False, showgrid=False, range=[-0.1, 0.1]),
+        yaxis=dict(showticklabels=False, showgrid=False, range=[-10, 10], title=""),
         xaxis=dict(range=[-0.1, 0.1], tickformat=".2%", title="Stock Price Growth"),
         margin={"t": 5},
         height=200,
@@ -176,18 +174,19 @@ def plot_swarm_chart(summary: SummaryData):
                 xref="x",
                 yref="y",
                 x0=0,
-                y0=-0.5,
+                y0=-10,
                 x1=0,
-                y1=0.5,
+                y1=10,
                 line=dict(color="#56CCF2", dash="dot"),
             )
         ],
+        showlegend=False,
     )
 
     return swarm_plot
 
 
-def plot_individual_stock_prices(data: StockData, stocks):
+def plot_individual_stock_prices(data: StockData, stocks: list[str]):
 
     equity_traces = [
         go.Scatter(
