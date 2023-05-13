@@ -2,7 +2,7 @@ calmap==0.0.9
 dash==2.6.2
 dash_bootstrap_components==1.2.1
 ffn==0.3.6
-Flask==2.2.2
+Flask==2.3.2
 gunicorn==20.1.0
 matplotlib==3.6.0
 numpy==1.23.3
